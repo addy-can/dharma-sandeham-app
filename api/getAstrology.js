@@ -1,10 +1,15 @@
 export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Only POST method is allowed' });
+  }
+
+  const body = JSON.parse(req.body);
   const {
     day, month, year,
     hour, minute,
     latitude, longitude,
     timezone
-  } = req.query;
+  } = body;
 
   const userID = '642794';     // 👈 Replace with your real userID
   const apiKey = '4ede7b1ef630a965146a6fd678f7c23db3ca5ece';     // 👈 Replace with your real API key
