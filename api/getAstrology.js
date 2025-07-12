@@ -3,18 +3,19 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Only POST method is allowed' });
   }
 
-const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+  const rawBody = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+
   const {
     day, month, year,
     hour, minute,
     latitude, longitude,
     timezone
-  } = body;
+  } = rawBody;
 
   const userID = '642794';     // 👈 Replace with your real userID
   const apiKey = '4ede7b1ef630a965146a6fd678f7c23db3ca5ece';     // 👈 Replace with your real API key
 
-  const body = {
+  const payload = {
     day: parseInt(day),
     month: parseInt(month),
     year: parseInt(year),
@@ -31,7 +32,7 @@ const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
       'Authorization': 'Basic ' + btoa(`${userID}:${apiKey}`),
       'Content-Type': 'application/json'
     },
-    body: JSON.stringify(body)
+    body: JSON.stringify(payload)
   });
 
   const data = await response.json();
