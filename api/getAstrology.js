@@ -3,7 +3,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Only POST method is allowed' });
   }
 
-  const body = JSON.parse(req.body);
+const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
   const {
     day, month, year,
     hour, minute,
