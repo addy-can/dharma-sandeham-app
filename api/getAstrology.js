@@ -16,14 +16,14 @@ export default async function handler(req, res) {
   const apiKey = '4ede7b1ef630a965146a6fd678f7c23db3ca5ece';     // 👈 Replace with your real API key
 
   const payload = {
-    day: parseInt(day) || 0,
-    month: parseInt(month) || 0,
-    year: parseInt(year) || 0,
-    hour: parseInt(hour) || 0,
-    minute: parseInt(minute) || 0,
-    latitude: parseFloat(latitude) || 0,
-    longitude: parseFloat(longitude) || 0,
-    timezone: parseFloat(timezone) || 0
+    day: Number(day),
+    month: Number(month),
+    year: Number(year),
+    hour: Number(hour),
+    minute: Number(minute),
+    latitude: Number(latitude),
+    longitude: Number(longitude),
+    timezone: Number(timezone)
   };
 
   const response = await fetch('https://json.astrologyapi.com/v1/astro_details', {
