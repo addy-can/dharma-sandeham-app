@@ -10,6 +10,8 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Missing required query parameters' });
   }
 
+  console.log('🧾 Raw query values:', req.query);
+
   const userID = '642794';
   const apiKey = '4ede7b1ef630a965146a6fd678f7c23db3ca5ece';
 
@@ -18,7 +20,7 @@ export default async function handler(req, res) {
     month: parseInt(month, 10),
     year: parseInt(year, 10),
     hour: parseInt(hour, 10),
-    minute: minute !== undefined ? parseInt(minute, 10) : -1,
+    minute: minute !== undefined && minute !== '' ? parseInt(minute, 10) : -1,
     latitude: parseFloat(latitude),
     longitude: parseFloat(longitude),
     timezone: parseFloat(timezone)
@@ -28,7 +30,7 @@ export default async function handler(req, res) {
 
   for (const [key, val] of Object.entries(payload)) {
     if (typeof val !== 'number' || isNaN(val) || val === -1) {
-      console.error(`❌ Invalid ${key}:`, val);
+      console.error(`❌ Invalid or missing '${key}':`, val);
       return res.status(400).json({ error: `Invalid or missing value for '${key}'`, value: val });
     }
   }
