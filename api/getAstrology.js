@@ -13,7 +13,7 @@ export default async function handler(req, res) {
   const userID = '642794';
   const apiKey = '4ede7b1ef630a965146a6fd678f7c23db3ca5ece';
 
-  const payload = JSON.parse(JSON.stringify({
+  const payload = {
     day: parseInt(day, 10),
     month: parseInt(month, 10),
     year: parseInt(year, 10),
@@ -22,7 +22,7 @@ export default async function handler(req, res) {
     latitude: parseFloat(latitude),
     longitude: parseFloat(longitude),
     timezone: parseFloat(timezone)
-  }));
+  };
 
   console.log('🟢 Payload being sent to Vedic Rishi API:', payload);
   console.log('📦 Final JSON body sent to API:', JSON.stringify(payload, null, 2));
@@ -35,16 +35,13 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Remove minute from payload for fallback attempt
-    const { minute, ...fallbackPayload } = payload;
-
     const response = await fetch('https://json.astrologyapi.com/v1/birth_details', {
       method: 'POST',
       headers: {
         'Authorization': 'Basic ' + Buffer.from(`${userID}:${apiKey}`).toString('base64'),
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(fallbackPayload)
+      body: JSON.stringify(payload)
     });
 
     const data = await response.json();
