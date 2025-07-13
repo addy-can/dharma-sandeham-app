@@ -1,5 +1,3 @@
-
-
 export default async function handler(req, res) {
   const { question, moonSign, ascendant, nakshatra } = req.query;
 
@@ -23,7 +21,15 @@ export default async function handler(req, res) {
       body: JSON.stringify(payload)
     });
 
-    const data = await response.json();
+    const text = await response.text(); // get raw text
+    let data;
+
+    try {
+      data = JSON.parse(text);
+    } catch (err) {
+      console.error('❌ Response is not valid JSON:', text);
+      return res.status(500).json({ error: 'Scripture lookup failed', details: 'Invalid JSON response from Vedic Shastra API' });
+    }
 
     if (!response.ok) {
       console.error('❌ Vedic Shastra API error:', data);
