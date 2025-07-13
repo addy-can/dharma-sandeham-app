@@ -10,7 +10,7 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: 'Missing required query parameters' });
   }
 
-  console.log('🧾 Raw query values:', req.query);
+  console.log('🧾 Incoming Query:', JSON.stringify(req.query, null, 2));
 
   const userID = '642794';
   const apiKey = '4ede7b1ef630a965146a6fd678f7c23db3ca5ece';
@@ -20,7 +20,7 @@ export default async function handler(req, res) {
     month: parseInt(month, 10),
     year: parseInt(year, 10),
     hour: parseInt(hour, 10),
-    minute: minute !== undefined && minute !== '' ? parseInt(minute, 10) : -1,
+    minute: typeof minute === 'string' && minute.trim() !== '' ? parseInt(minute.trim(), 10) : -1,
     latitude: parseFloat(latitude),
     longitude: parseFloat(longitude),
     timezone: parseFloat(timezone)
