@@ -17,16 +17,16 @@ export default async function handler(req, res) {
   const userID = '642794';
   const apiKey = '4ede7b1ef630a965146a6fd678f7c23db3ca5ece';
 
-  const payload = {
+  const payload = JSON.parse(JSON.stringify({
     day: parseInt(day, 10),
     month: parseInt(month, 10),
     year: parseInt(year, 10),
     hour: parseInt(hour, 10),
-    minute: typeof minute === 'string' && minute.trim() !== '' ? parseInt(minute.trim(), 10) : -1,
+    minute: parseInt(minute, 10),
     latitude: parseFloat(latitude),
     longitude: parseFloat(longitude),
     timezone: parseFloat(timezone)
-  };
+  }));
 
   console.log('🟢 Payload being sent to Vedic Rishi API:', payload);
   console.log('📦 Final JSON body sent to API:', JSON.stringify(payload, null, 2));
