@@ -8,11 +8,17 @@ export default async function handler(req, res) {
     timezone
   } = req.query;
 
-  if (!day || !month || !year || !hour || !minute || !latitude || !longitude || !timezone) {
-    return res.status(400).json({ error: 'Missing required query parameters' });
-  }
-
   console.log('🧾 Incoming Query:', JSON.stringify(req.query, null, 2));
+
+  // 🔍 Validate 'minute' strictly
+  const parsedMinute = parseInt(minute, 10);
+  if (isNaN(parsedMinute)) {
+    console.error('❌ Invalid minute value:', minute);
+    return res.status(400).json({
+      error: 'Invalid input: minute must be a number',
+      value: minute
+    });
+  }
 
   const userID = '642794';
   const apiKey = '4ede7b1ef630a965146a6fd678f7c23db3ca5ece';
@@ -22,7 +28,7 @@ export default async function handler(req, res) {
     month: parseInt(month, 10),
     year: parseInt(year, 10),
     hour: parseInt(hour, 10),
-    minute: parseInt(minute, 10),
+    minute: parsedMinute,
     latitude: parseFloat(latitude),
     longitude: parseFloat(longitude),
     timezone: parseFloat(timezone)
