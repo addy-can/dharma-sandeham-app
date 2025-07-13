@@ -27,6 +27,7 @@ export default async function handler(req, res) {
   };
 
   console.log('🟢 Payload being sent to Vedic Rishi API:', payload);
+  console.log('📦 Final JSON body sent to API:', JSON.stringify(payload, null, 2));
 
   for (const [key, val] of Object.entries(payload)) {
     if (typeof val !== 'number' || isNaN(val) || val === -1) {
