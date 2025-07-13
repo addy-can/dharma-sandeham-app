@@ -8,38 +8,34 @@ export default async function handler(req, res) {
 
   console.log('🧾 Incoming Query:', JSON.stringify(req.query, null, 2));
 
-  console.log('🧪 Raw minute value (pre-parse):', minute);
-
-  const userID = '642794';
-  const apiKey = '4ede7b1ef630a965146a6fd678f7c23db3ca5ece';
-
   const payload = {
-    day: parseInt(day, 10),
-    month: parseInt(month, 10),
     year: parseInt(year, 10),
-    hour: parseInt(hour, 10),
-    minute: isNaN(Number(minute)) ? 0 : parseInt(minute, 10),
+    month: parseInt(month, 10),
+    date: parseInt(day, 10),
+    hours: parseInt(hour, 10),
+    minutes: parseInt(minute, 10),
+    seconds: 0,
     latitude: parseFloat(latitude),
     longitude: parseFloat(longitude),
     timezone: parseFloat(timezone)
   };
 
-  console.log('🟢 Payload being sent to Vedic Rishi API:', payload);
-  console.log('📦 Final JSON body sent to API:', JSON.stringify(payload, null, 2));
+  console.log('🟢 Payload to Free Astrology API:', payload);
 
+  // Validate basic structure before sending
   for (const [key, val] of Object.entries(payload)) {
-    if (key !== 'minute' && (typeof val !== 'number' || isNaN(val) || val === -1)) {
+    if (typeof val !== 'number' || isNaN(val)) {
       console.error(`❌ Invalid or missing '${key}':`, val);
       return res.status(400).json({ error: `Invalid or missing value for '${key}'`, value: val });
     }
   }
 
   try {
-    const response = await fetch('https://json.astrologyapi.com/v1/birth_details', {
+    const response = await fetch('https://json.freeastrologyapi.com/planets/extended', {
       method: 'POST',
       headers: {
-        'Authorization': 'Basic ' + Buffer.from(`${userID}:${apiKey}`).toString('base64'),
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'x-api-key': '6THqThNB22aDtBIrmpIO17Ib2PobwjAG6uJMcyUa'
       },
       body: JSON.stringify(payload)
     });
@@ -47,12 +43,13 @@ export default async function handler(req, res) {
     const data = await response.json();
 
     if (!response.ok || data.status === false) {
+      console.error('❌ Free Astrology API error:', data);
       throw new Error(JSON.stringify(data));
     }
 
     res.status(200).json(data);
   } catch (error) {
-    console.error('❌ API request failed:', error.message);
+    console.error('❌ Astrology API request failed:', error.message);
     res.status(500).json({ error: 'Astrology API request failed', details: error.message });
   }
 }
