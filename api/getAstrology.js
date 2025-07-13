@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export default async function handler(req, res) {
   const {
     day, month, year,
@@ -36,15 +38,22 @@ export default async function handler(req, res) {
     }
   }
 
-  const response = await fetch('https://json.astrologyapi.com/v1/astro_details', {
-    method: 'POST',
+  const authHeader = {
     headers: {
       'Authorization': 'Basic ' + Buffer.from(`${userID}:${apiKey}`).toString('base64'),
       'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(payload)
-  });
+    }
+  };
 
-  const data = await response.json();
-  res.status(200).json(data);
+  try {
+    const response = await axios.post(
+      'https://json.astrologyapi.com/v1/astro_details',
+      payload,
+      authHeader
+    );
+    res.status(200).json(response.data);
+  } catch (error) {
+    console.error('❌ API request failed:', error.response?.data || error.message);
+    res.status(500).json({ error: 'Astrology API request failed', details: error.response?.data || error.message });
+  }
 }
