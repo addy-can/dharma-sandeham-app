@@ -14,15 +14,21 @@ export default async function handler(req, res) {
   const apiKey = '4ede7b1ef630a965146a6fd678f7c23db3ca5ece';
 
   const payload = {
-    day: Number(day),
-    month: Number(month),
-    year: Number(year),
-    hour: Number(hour),
-    minute: Number(minute),
-    latitude: Number(latitude),
-    longitude: Number(longitude),
-    timezone: Number(timezone)
+    day: parseInt(day, 10),
+    month: parseInt(month, 10),
+    year: parseInt(year, 10),
+    hour: parseInt(hour, 10),
+    minute: parseInt(minute, 10),
+    latitude: parseFloat(latitude),
+    longitude: parseFloat(longitude),
+    timezone: parseFloat(timezone)
   };
+
+  for (const [key, val] of Object.entries(payload)) {
+    if (typeof val !== 'number' || isNaN(val)) {
+      return res.status(400).json({ error: `Invalid or missing value for '${key}'` });
+    }
+  }
 
   const response = await fetch('https://json.astrologyapi.com/v1/astro_details', {
     method: 'POST',
