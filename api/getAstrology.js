@@ -1,4 +1,3 @@
-
 export default async function handler(req, res) {
   const {
     day, month, year,
@@ -11,16 +10,6 @@ export default async function handler(req, res) {
 
   console.log('🧪 Raw minute value (pre-parse):', minute);
 
-  // 🔍 Validate 'minute' strictly
-  const parsedMinute = Number(minute);
-  if (isNaN(parsedMinute)) {
-    console.error('❌ Invalid minute value:', minute);
-    return res.status(400).json({
-      error: 'Invalid input: minute must be a number',
-      value: minute
-    });
-  }
-
   const userID = '642794';
   const apiKey = '4ede7b1ef630a965146a6fd678f7c23db3ca5ece';
 
@@ -29,7 +18,7 @@ export default async function handler(req, res) {
     month: parseInt(month, 10),
     year: parseInt(year, 10),
     hour: parseInt(hour, 10),
-    minute: parsedMinute,
+    minute: parseInt(minute, 10),
     latitude: parseFloat(latitude),
     longitude: parseFloat(longitude),
     timezone: parseFloat(timezone)
