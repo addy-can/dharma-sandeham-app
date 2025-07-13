@@ -18,7 +18,7 @@ export default async function handler(req, res) {
     month: parseInt(month, 10),
     year: parseInt(year, 10),
     hour: parseInt(hour, 10),
-    minute: parseInt(minute, 10),
+    minute: minute !== undefined ? parseInt(minute, 10) : -1,
     latitude: parseFloat(latitude),
     longitude: parseFloat(longitude),
     timezone: parseFloat(timezone)
@@ -27,7 +27,7 @@ export default async function handler(req, res) {
   console.log('🟢 Payload being sent to Vedic Rishi API:', payload);
 
   for (const [key, val] of Object.entries(payload)) {
-    if (val === undefined || val === null || isNaN(val)) {
+    if (typeof val !== 'number' || isNaN(val) || val === -1) {
       console.error(`❌ Invalid ${key}:`, val);
       return res.status(400).json({ error: `Invalid or missing value for '${key}'`, value: val });
     }
