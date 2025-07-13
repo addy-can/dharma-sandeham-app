@@ -22,9 +22,14 @@ export default async function handler(req, res) {
   console.log('🟢 Payload to Free Astrology API:', payload);
 
   // Validate basic structure before sending
+  console.log('🔍 Validating payload keys and types:', JSON.stringify(payload, null, 2));
   for (const [key, val] of Object.entries(payload)) {
     if (typeof val !== 'number' || isNaN(val)) {
-      console.error(`❌ Invalid or missing '${key}':`, val);
+      console.error(`❌ Validation failed for key '${key}':`, {
+        rawValue: req.query[key],
+        parsedValue: val,
+        expectedType: 'number'
+      });
       return res.status(400).json({ error: `Invalid or missing value for '${key}'`, value: val });
     }
   }
