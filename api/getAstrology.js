@@ -1,4 +1,3 @@
-import axios from 'axios';
 
 export default async function handler(req, res) {
   const {
@@ -46,22 +45,28 @@ export default async function handler(req, res) {
     }
   }
 
-  const authHeader = {
-    headers: {
-      'Authorization': 'Basic ' + Buffer.from(`${userID}:${apiKey}`).toString('base64'),
-      'Content-Type': 'application/json'
-    }
-  };
-
   try {
-    const response = await axios.post(
-      'https://json.astrologyapi.com/v1/birth_details',
-      payload,
-      authHeader
-    );
-    res.status(200).json(response.data);
+    // Remove minute from payload for fallback attempt
+    const { minute, ...fallbackPayload } = payload;
+
+    const response = await fetch('https://json.astrologyapi.com/v1/birth_details', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Basic ' + Buffer.from(`${userID}:${apiKey}`).toString('base64'),
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(fallbackPayload)
+    });
+
+    const data = await response.json();
+
+    if (!response.ok || data.status === false) {
+      throw new Error(JSON.stringify(data));
+    }
+
+    res.status(200).json(data);
   } catch (error) {
-    console.error('❌ API request failed:', error.response?.data || error.message);
-    res.status(500).json({ error: 'Astrology API request failed', details: error.response?.data || error.message });
+    console.error('❌ API request failed:', error.message);
+    res.status(500).json({ error: 'Astrology API request failed', details: error.message });
   }
 }
