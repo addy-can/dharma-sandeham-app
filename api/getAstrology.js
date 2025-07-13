@@ -12,9 +12,8 @@ export default async function handler(req, res) {
     year: parseInt(year, 10),
     month: parseInt(month, 10),
     day: parseInt(day, 10),
-    hours: parseInt(hour, 10),
-    minutes: parseInt(minute, 10),
-    seconds: 0,
+    hour: parseInt(hour, 10),
+    minute: parseInt(minute, 10),
     latitude: parseFloat(latitude),
     longitude: parseFloat(longitude),
     timezone: parseFloat(timezone)
