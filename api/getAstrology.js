@@ -24,9 +24,12 @@ export default async function handler(req, res) {
     timezone: parseFloat(timezone)
   };
 
+  console.log('🟢 Payload being sent to Vedic Rishi API:', payload);
+
   for (const [key, val] of Object.entries(payload)) {
-    if (typeof val !== 'number' || isNaN(val)) {
-      return res.status(400).json({ error: `Invalid or missing value for '${key}'` });
+    if (val === undefined || val === null || isNaN(val)) {
+      console.error(`❌ Invalid ${key}:`, val);
+      return res.status(400).json({ error: `Invalid or missing value for '${key}'`, value: val });
     }
   }
 
