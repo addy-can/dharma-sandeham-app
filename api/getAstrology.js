@@ -1,30 +1,14 @@
-import { buffer } from 'micro';
-
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
-
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Only POST method is allowed' });
-  }
-
-  let body;
-  try {
-    const buf = await buffer(req);
-    body = JSON.parse(buf.toString());
-  } catch (error) {
-    return res.status(400).json({ error: 'Invalid JSON in request body' });
-  }
-
   const {
     day, month, year,
     hour, minute,
     latitude, longitude,
     timezone
-  } = body;
+  } = req.query;
+
+  if (!day || !month || !year || !hour || !minute || !latitude || !longitude || !timezone) {
+    return res.status(400).json({ error: 'Missing required query parameters' });
+  }
 
   const userID = '642794';
   const apiKey = '4ede7b1ef630a965146a6fd678f7c23db3ca5ece';
