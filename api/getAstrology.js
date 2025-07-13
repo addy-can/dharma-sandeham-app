@@ -18,7 +18,7 @@ export default async function handler(req, res) {
     month: parseInt(month, 10),
     year: parseInt(year, 10),
     hour: parseInt(hour, 10),
-    minute: parseInt(minute, 10),
+    minute: isNaN(Number(minute)) ? 0 : parseInt(minute, 10),
     latitude: parseFloat(latitude),
     longitude: parseFloat(longitude),
     timezone: parseFloat(timezone)
@@ -28,7 +28,7 @@ export default async function handler(req, res) {
   console.log('📦 Final JSON body sent to API:', JSON.stringify(payload, null, 2));
 
   for (const [key, val] of Object.entries(payload)) {
-    if (typeof val !== 'number' || isNaN(val) || val === -1) {
+    if (key !== 'minute' && (typeof val !== 'number' || isNaN(val) || val === -1)) {
       console.error(`❌ Invalid or missing '${key}':`, val);
       return res.status(400).json({ error: `Invalid or missing value for '${key}'`, value: val });
     }
