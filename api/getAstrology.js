@@ -11,9 +11,10 @@ export default async function handler(req, res) {
   const payload = {
     year: parseInt(year, 10),
     month: parseInt(month, 10),
-    day: parseInt(day, 10),
-    hour: parseInt(hour, 10),
-    minute: parseInt(minute, 10),
+    date: parseInt(day, 10),
+    hours: parseInt(hour, 10),
+    minutes: parseInt(minute, 10),
+    seconds: 0,
     latitude: parseFloat(latitude),
     longitude: parseFloat(longitude),
     timezone: parseFloat(timezone)
