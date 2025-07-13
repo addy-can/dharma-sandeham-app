@@ -55,7 +55,7 @@ export default async function handler(req, res) {
 
   try {
     const response = await axios.post(
-      'https://json.astrologyapi.com/v1/astro_details',
+      'https://json.astrologyapi.com/v1/birth_details',
       payload,
       authHeader
     );
