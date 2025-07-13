@@ -10,8 +10,10 @@ export default async function handler(req, res) {
 
   console.log('🧾 Incoming Query:', JSON.stringify(req.query, null, 2));
 
+  console.log('🧪 Raw minute value (pre-parse):', minute);
+
   // 🔍 Validate 'minute' strictly
-  const parsedMinute = parseInt(minute, 10);
+  const parsedMinute = Number(minute);
   if (isNaN(parsedMinute)) {
     console.error('❌ Invalid minute value:', minute);
     return res.status(400).json({
