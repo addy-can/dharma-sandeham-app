@@ -15,7 +15,7 @@ export default async function handler(req, res) {
   };
 
   try {
-    const response = await fetch('https://vedic-shastra-api.vercel.app/api/getScripture', {
+    const response = await fetch('https://vedic-shastra-api.vercel.app/api/scriptures', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
